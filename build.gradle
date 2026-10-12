@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+}
+
+version = mod_version
+group = 'com.mojo.mcavillagetitles'
+base { archivesName = "mcavillagetitles-1.20.1-forge" }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    runs {
+        client { workingDirectory project.file('run'); property 'forge.logging.console.level', 'debug'
+                 mods { mcavillagetitles { source sourceSets.main } } }
+        server { workingDirectory project.file('run'); args '--nogui'
+                 mods { mcavillagetitles { source sourceSets.main } } }
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.minecraftforge.net/' }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
+    // MCA (merged Forge+Fabric jar; Forge classes live under the "forge." package prefix). Compile-only.
+    compileOnly files('libs/mca-7.7.1-beta.4-1.20.1-universal.jar')
+}
+
+processResources {
+    inputs.property 'v', mod_version
+    filesMatching('META-INF/mods.toml') { expand 'mod_version': mod_version }
+}
